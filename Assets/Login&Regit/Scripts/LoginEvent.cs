@@ -2,34 +2,56 @@
 using System.Collections;
 using UnityEngine.UI;
 using LitJson;
-public class login : MonoBehaviour {
+
+public class LoginEvent : MonoBehaviour {
 	string url_login = "http://115.28.140.76:8080/Game1/s/user/login";
 	string token;
 	int state;
 	int uid;
-	int speed=2000;
+	int speed=10000;
 	GameObject hint;
 	GameObject Bt_login;
 	GameObject Bt_regit;
 	GameObject Ip_username;
 	GameObject Ip_password;
-
-
 	// Use this for initialization
-	void Start() {
+	void Start () {
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		hint = GameObject.Find ("hint");
 		Bt_login = GameObject.Find ("Bt_login");
 		Bt_regit = GameObject.Find ("Bt_regit");
 		Ip_username = GameObject.Find ("Ip_username");
 		Ip_password = GameObject.Find ("Ip_password");
+		hint.GetComponent<CanvasRenderer>().SetAlpha(0);
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
 	}
 
-	// Update is called once per frame
-	void Update() {
+	public void LoginOnclick(){
+		StartCoroutine(Login ());
+	}
 
+	public void RegitOnClick() {
+		GameObject Bt_login = GameObject.Find ("Bt_login");
+		GameObject Bt_regit = GameObject.Find ("Bt_regit");
+		GameObject Ip_username = GameObject.Find ("Ip_username");
+		GameObject Ip_password = GameObject.Find ("Ip_password");
+		Bt_login.GetComponent<Rigidbody> ().velocity = Bt_login.transform.up * speed;
+		Bt_regit.GetComponent<Rigidbody> ().velocity = Bt_regit.transform.up * speed;
+		Ip_username.GetComponent<Rigidbody> ().velocity = Ip_username.transform.up * speed;
+		Ip_password.GetComponent<Rigidbody> ().velocity = Ip_password.transform.up * speed;
+		StartCoroutine(WaitAndPrint(0.3F));
+	}
+
+	IEnumerator WaitAndPrint(float waitTime)
+	{
+		yield return new WaitForSeconds(waitTime);
+		Application.LoadLevel("Regit");
 	}
 	void fly(){
-		
 		Bt_login.GetComponent<Rigidbody> ().velocity = Bt_login.transform.up * speed;
 		Bt_regit.GetComponent<Rigidbody> ().velocity = Bt_regit.transform.up * speed;
 		Ip_username.GetComponent<Rigidbody> ().velocity = Ip_username.transform.up * speed;
@@ -48,6 +70,7 @@ public class login : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(waitTime);
 		hint.GetComponent<CanvasRenderer>().SetAlpha(0);
+		hint.transform.FindChild ("Text").GetComponent<Text> ().text = "";
 	}
 
 	public IEnumerator Login()
@@ -77,12 +100,9 @@ public class login : MonoBehaviour {
 			} 
 			else {
 				hint.GetComponent<CanvasRenderer>().SetAlpha(1);
+				hint.transform.FindChild ("Text").GetComponent<Text> ().text = data["message"].ToString ();
 				StartCoroutine(hidehint(1.5F));
 			}
 		}
 	}
-	public void Onclick(){
-		StartCoroutine(Login ());
-	}
-
 }

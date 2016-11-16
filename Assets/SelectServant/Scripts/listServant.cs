@@ -6,7 +6,7 @@ using System.Text;
 using LitJson;
 
 public class listServant : MonoBehaviour {
-	string url_getMyEmp = "http://220.184.61.5:8080/Game1/s/battle/getMyEmp";
+	string url_getMyEmp = "http://115.28.140.76:8080/Game1/s/battle/getMyEmp";
 	List<hero> emps=new List<hero>();
 	string token;
 	int uid;

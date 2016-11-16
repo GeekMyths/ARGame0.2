@@ -60,13 +60,8 @@
      <Compile Include="Assets\HelloAR\Scripts\ARIsEasyBehaviour.cs" />
      <Compile Include="Assets\HelloAR\Scripts\EasyImageTargetBehaviour.cs" />
      <Compile Include="Assets\Load\Scripts\LoadData.cs" />
-     <Compile Include="Assets\Login&amp;Regit\Scripts\activeornot.cs" />
-     <Compile Include="Assets\Login&amp;Regit\Scripts\bt_return.cs" />
-     <Compile Include="Assets\Login&amp;Regit\Scripts\login.cs" />
-     <Compile Include="Assets\Login&amp;Regit\Scripts\regit.cs" />
-     <Compile Include="Assets\Login&amp;Regit\Scripts\regit_onclick.cs" />
-     <Compile Include="Assets\Login&amp;Regit\Scripts\show.cs" />
-     <Compile Include="Assets\LoginEvent.cs" />
+     <Compile Include="Assets\Login&amp;Regit\Scripts\LoginEvent.cs" />
+     <Compile Include="Assets\Login&amp;Regit\Scripts\RegitEvent.cs" />
      <Compile Include="Assets\Main Camera\Scripts\MainCamera.cs" />
      <Compile Include="Assets\Main\Scripts\Myevent.cs" />
      <Compile Include="Assets\Main\Scripts\dialog_cancel.cs" />

@@ -44,7 +44,7 @@ public class Myevent : MonoBehaviour {
 		click = false;
 		game = GameObject.Find ("friend").GetComponent<Rigidbody>();
 		group_friend = GameObject.Find ("friend").GetComponent<RectTransform>();
-		distance = group_friend.rect.width / 20;
+		distance = group_friend.rect.width / 12;
 		endPoi = new Vector3 (game.transform.position.x - distance, game.transform.position.y, game.transform.position.z);
 		game.position = endPoi;
 
@@ -95,11 +95,12 @@ public class Myevent : MonoBehaviour {
 		dialog_input.SetActive (true);
 	}
 	public void MessageOnClick(){
-		for(int i = 0;i<10;i++){
-			BaseMessage message = new BaseMessage (i,0, "" + i, 0, 0, null, 0, null);
-			messageStore.AddLast (message);
-		}
 		messageBox.SetActive (true);
+		messageBox.transform.FindChild ("bg").GetComponent<Button> ().onClick.AddListener (
+			delegate() {
+				messageBox.SetActive(false);
+			}
+		);
 		parent = GameObject.Find ("Content");
 		contentSize = parent.GetComponent<RectTransform> ().sizeDelta;
 		itemHeight = item.GetComponent<RectTransform> ().rect.height;
