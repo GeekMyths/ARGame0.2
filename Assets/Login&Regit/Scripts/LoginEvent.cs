@@ -7,7 +7,7 @@ public class LoginEvent : MonoBehaviour {
 	string url_login = "http://115.28.140.76:8080/Game1/s/user/login";
 	string token;
 	int state;
-	int uid;
+	string uid;
 	int speed=10000;
 	GameObject hint;
 	GameObject Bt_login;
@@ -60,7 +60,7 @@ public class LoginEvent : MonoBehaviour {
 	IEnumerator goLogin(float waitTime)
 	{
 		yield return new WaitForSeconds(waitTime);
-		PlayerPrefs.SetInt("uid", uid);
+		PlayerPrefs.SetString("uid", uid);
 		PlayerPrefs.SetString ("token", token);
 		print ("token:" + token+" uid:"+uid);
 		Application.LoadLevel("Main");
@@ -95,7 +95,7 @@ public class LoginEvent : MonoBehaviour {
 			if (state == 1) {
 				fly ();
 				token = data["value"]["token"].ToString ();
-				uid  = int.Parse (data ["value"]["uid"].ToString ());
+				uid  = data ["value"]["uid"].ToString ();
 				StartCoroutine (goLogin (0.5F));
 			} 
 			else {

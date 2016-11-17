@@ -10,6 +10,8 @@ using Main.Messages;
 using WebSocketSharp;
 
 public class Myevent : MonoBehaviour {
+	string username;
+
 	bool isRight;
 	bool click;
 	Rigidbody game;
@@ -39,6 +41,7 @@ public class Myevent : MonoBehaviour {
 		webSocketBuilder = WebSocketBuilder.instance ();
 		webSocketBuilder.BoxHandler += boxHandle;
 		webSocketBuilder.connect ();
+		username = PlayerPrefs.GetString ("uid");
 
 		isRight = false;
 		click = false;
@@ -72,7 +75,7 @@ public class Myevent : MonoBehaviour {
 		}
 	}
 	void SetId(){
-		GameObject.Find("name").GetComponent<Text>().text = "asd";
+		GameObject.Find("name").GetComponent<Text>().text = username;
 		GameObject.Find("lv").GetComponent<Text>().text = "lv.123";
 	}
 	void SetEValue(){

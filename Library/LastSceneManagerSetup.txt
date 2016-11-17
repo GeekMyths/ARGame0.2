@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Login&Regit/Scene/Regit.unity
+- path: Assets/Login&Regit/Scene/Login.unity
   isLoaded: 1
   isActive: 1
