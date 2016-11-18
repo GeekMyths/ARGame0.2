@@ -13,8 +13,8 @@ namespace WebSocketSharp
 		#region private static variable
 
 		private static WebSocketBuilder webSocketBuilder;
-		private static int uid;
-		private static string token;
+		private static int uid = int.Parse(PlayerPrefs.GetString("uid"));
+		private static string token = PlayerPrefs.GetString("token");
 
 		#endregion
 

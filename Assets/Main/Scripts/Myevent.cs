@@ -24,9 +24,11 @@ public class Myevent : MonoBehaviour {
 	public GameObject dialog_input;
 	public GameObject item;
 	public GameObject messageBox;
+	public GameObject inviteMessage;
 
 	List<GameObject> items = new List<GameObject> ();
 	LinkedList<BaseMessage> messageStore = new LinkedList<BaseMessage> ();
+	static LinkedList<BaseMessage> messages = new LinkedList<BaseMessage> ();
 	GameObject parent;
 	Vector3 itemLocalPos;
 	Vector2 contentSize;
@@ -53,6 +55,7 @@ public class Myevent : MonoBehaviour {
 
 		SetId ();
 		SetEValue ();
+		InviteMessage ();
 	}
 	
 	// Update is called once per frame
@@ -73,6 +76,10 @@ public class Myevent : MonoBehaviour {
 			message = messageStore.First.Value;
 			messageStore.RemoveFirst ();
 		}
+		//多条消息弹出效果
+		//inviteMessage.SetActive (true);
+		inviteMessage.name = message.mId.ToString ();
+		messages.AddLast (message);
 	}
 	void SetId(){
 		GameObject.Find("name").GetComponent<Text>().text = username;
@@ -97,21 +104,44 @@ public class Myevent : MonoBehaviour {
 	public void PVPOnClick(){
 		dialog_input.SetActive (true);
 	}
-	public void MessageOnClick(){
+	void MessageOnClick(){
 		messageBox.SetActive (true);
+		parent = GameObject.Find ("Content");
 		messageBox.transform.FindChild ("bg").GetComponent<Button> ().onClick.AddListener (
 			delegate() {
 				messageBox.SetActive(false);
+				for(int i = 0; i < parent.transform.childCount; i++)
+				{
+					GameObject go = parent.transform.GetChild(i).gameObject;
+					RemoveItem(go);
+				}
 			}
 		);
-		parent = GameObject.Find ("Content");
 		contentSize = parent.GetComponent<RectTransform> ().sizeDelta;
 		itemHeight = item.GetComponent<RectTransform> ().rect.height;
 		itemLocalPos = item.transform.localPosition;
 
-		foreach(BaseMessage message in messageStore){
+		foreach(BaseMessage message in messages){
 			AddItem (message);
 		}
+	}
+	public void InviteMessage(){
+		inviteMessage.transform.FindChild ("dialog").transform.FindChild ("ok").GetComponent<Button> ().onClick.AddListener (
+			delegate() {
+				long mId = long.Parse (inviteMessage.name);
+				foreach (BaseMessage message in messages) {
+					if (message.mId == mId) {
+						StartCoroutine (accept (message));
+					}
+				}
+				Application.LoadLevel("SelectServant");
+			}
+		);
+		inviteMessage.transform.FindChild ("dialog").transform.FindChild ("cancel").GetComponent<Button> ().onClick.AddListener (
+			delegate() {
+				inviteMessage.SetActive (false);
+			}
+		);
 	}
 	public void boxHandle (object context, BoxEventArgs e)
 	{
@@ -121,6 +151,7 @@ public class Myevent : MonoBehaviour {
 				return;
 			if (box.isInBox ()) {
 				foreach (BaseMessage message in box.getMessages()) {
+					print(message.text);
 					lock (messageStore) {
 						messageStore.AddLast (message);
 					}
@@ -142,6 +173,7 @@ public class Myevent : MonoBehaviour {
 	public void AddItem (BaseMessage message)
 	{
 		GameObject a = Instantiate (item) as GameObject;
+		a.name = message.mId.ToString ();
 		a.transform.FindChild ("Text").GetComponent<Text> ().text = message.text;
 		a.transform.FindChild ("okay").GetComponent<Button> ().onClick.AddListener (
 			delegate() {
@@ -150,7 +182,7 @@ public class Myevent : MonoBehaviour {
 		);
 		a.transform.FindChild ("cancel").GetComponent<Button> ().onClick.AddListener (
 			delegate() {
-				itemCancelClick(a);
+				itemCancelClick(a,message);
 			}
 		);
 		a.GetComponent<Transform> ().SetParent (parent.GetComponent<Transform> (), false);
@@ -178,10 +210,10 @@ public class Myevent : MonoBehaviour {
 			parent.GetComponent<RectTransform> ().sizeDelta = contentSize;
 	}
 
-	public void itemOkClick (GameObject button)
+	public void itemOkClick (GameObject a)
 	{
-		long mId = long.Parse (button.name);
-		foreach (BaseMessage message in messageStore) {
+		long mId = long.Parse (a.name);
+		foreach (BaseMessage message in messages) {
 			if (message.mId == mId) {
 				StartCoroutine (accept (message));
 			}
@@ -207,8 +239,9 @@ public class Myevent : MonoBehaviour {
 		}
 	}
 
-	public void itemCancelClick (GameObject item)
+	public void itemCancelClick (GameObject item,BaseMessage message)
 	{
 		RemoveItem (item);
+		messages.Remove (message);
 	}
 }

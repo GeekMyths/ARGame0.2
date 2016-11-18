@@ -68,7 +68,6 @@
      <Compile Include="Assets\Main\Scripts\dialog_ok.cs" />
      <Compile Include="Assets\Main\Scripts\initMessage.cs" />
      <Compile Include="Assets\Main\Scripts\input_ok.cs" />
-     <Compile Include="Assets\Main\Scripts\invite_ok.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
@@ -314,6 +313,7 @@
      <Compile Include="Assets\SocketIO\websocket-sharp\WsFrame.cs" />
      <Compile Include="Assets\SocketIO\websocket-sharp\WsStream.cs" />
      <Compile Include="Assets\addtext.cs" />
+     <Compile Include="Assets\invite_ok.cs" />
      <Compile Include="Assets\setHealth.cs" />
      <Compile Include="Assets\test.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />

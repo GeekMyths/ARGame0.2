@@ -3,14 +3,15 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Main\Scripts\Myevent.cs">
     <Files>
       <File FileName="Assets\Constant\APIConstant.cs" Line="1" Column="1" />
-      <File FileName="Assets\Main\Scripts\Myevent.cs" Line="107" Column="37" />
+      <File FileName="Assets\Main\Scripts\Myevent.cs" Line="42" Column="17" />
       <File FileName="Assets\Main\Scripts\input_ok.cs" Line="1" Column="1" />
       <File FileName="Assets\SelectServant\Scripts\listServant.cs" Line="1" Column="1" />
-      <File FileName="Assets\Login&amp;Regit\Scripts\LoginEvent.cs" Line="98" Column="45" />
+      <File FileName="Assets\Login&amp;Regit\Scripts\LoginEvent.cs" Line="1" Column="1" />
       <File FileName="Assets\Login&amp;Regit\Scripts\RegitEvent.cs" Line="1" Column="1" />
       <File FileName="Assets\SelectServant\Scripts\myTime.cs" Line="1" Column="1" />
       <File FileName="Assets\SelectServant\Scripts\select.cs" Line="1" Column="1" />
       <File FileName="Assets\Main\Scripts\initMessage.cs" Line="1" Column="1" />
+      <File FileName="Assets\invite_ok.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
