@@ -9,13 +9,13 @@ public class fight : MonoBehaviour {
 	double fighttime;
 	double facttime;
 	int truetime;
-	int uid;
+	string uid;
 	string token;
 	int i=0;
 	int xxx=0;
 	int round=1;
 	string order="";
-	long [] skcodes=new long[3];
+	long [] skidd=new long[3];
 	static hero me=new hero();
 	static hero bad= new hero();
 	public GameObject clock;
@@ -62,7 +62,7 @@ public class fight : MonoBehaviour {
 	
 //	 enblood= GameObject.Find ("enblood");
 //		seblood= GameObject.Find ("seblood");
-		uid = PlayerPrefs.GetInt ("uid");
+		uid = PlayerPrefs.GetString ("uid");
 		token=PlayerPrefs.GetString("token");
 
 	}
@@ -93,7 +93,7 @@ public class fight : MonoBehaviour {
 							{
 								if(order.Equals(me.skills[j].skcode.ToString()))
 								{
-									skcodes [i] = (long)me.skills [j].skid;
+									skidd [i] = (long)me.skills [j].skid;
 									i++;
 									xxx = 0;
 								}	
@@ -145,16 +145,22 @@ public class fight : MonoBehaviour {
 		if (i == 0) 
 		{
 			long[] blank = new long[0];
-			skcodes = blank;
+			skidd = blank;
 		}
-		string oow = "{\"name\":\""+skcodes.ToString()+"\"}";
-		JsonData jsq = JsonMapper.ToObject (oow);
-		string oo = jsq [name].ToString ();
+//		JsonData jsq = new JsonData ();
+//		for (int ob = 0; ob <= i; ob++) {
+//			JsonData temp = new JsonData ();
+//			temp = skidd [ob];
+//			jsq.Add (temp);
+//		}
+//		string po = jsq.ToJson();
 		WWWForm form = new WWWForm();
-		form.AddField("myskiils",oo);
-		form.AddField("uid",uid);
-		form.AddField("token",token);
-		WWW www = new WWW("http://220.184.61.5:8080/game1/s/register", form);
+		form.AddField("myskiils",""); //   need skidd
+		var head = form.headers;
+		head ["token"] = token;
+		head ["uid"] = uid;
+		var dat = form.data;
+		WWW www = new WWW("http://220.184.61.5:8080/game1/s/register", dat,head);
 		yield return www;
 		if (www.error != null) {
 			print (www.error);
@@ -235,8 +241,8 @@ public class fight : MonoBehaviour {
 
 			while (count > 0 || i > 0) {
 
-				myskt = whichsk (me, skcodes [nmyskt]);
-				hisskt = whichsk (bad,int.Parse(skts [nhisskt]["skcode"].ToString()));
+				myskt = whichsk (me, skidd[nmyskt]);
+				hisskt = whichsk (bad,int.Parse(skts [nhisskt]["skid"].ToString()));
 				cool mysktcool = whichcool (myskt.skid, mycool);
 				cool hissktcool = whichcool (hisskt.skid, hiscool);
 				int we;
@@ -256,7 +262,7 @@ public class fight : MonoBehaviour {
 						if (i != 0) {
 							++nmyskt;
 
-							skillrecord = whichsk (me, skcodes[nmyskt]);
+							skillrecord = whichsk (me, skidd[nmyskt]);
 
 							myskttime += skillrecord.channelBefore;
 						}
@@ -409,7 +415,7 @@ public class fight : MonoBehaviour {
 					if (i != 0) {
 						++nmyskt;
 
-						skillrecord = whichsk (me, skcodes[nmyskt]);
+							skillrecord = whichsk (me, skidd[nmyskt]);
 
 						myskttime += skillrecord.channelBefore;
 					}
@@ -424,7 +430,7 @@ public class fight : MonoBehaviour {
 						--count;
 						if (count != 0) {
 							++nhisskt;
-							skillrecord = whichsk (bad, int.Parse (skts [nhisskt]["skcode"].ToString ()));
+							skillrecord = whichsk (bad, int.Parse (skts [nhisskt]["skid"].ToString ()));
 							hisskttime += skillrecord.channelBefore;
 						}
 
@@ -579,7 +585,7 @@ public class fight : MonoBehaviour {
 						if (count != 0) {
 							++nhisskt;
 
-							skillrecord = whichsk (bad, int.Parse (skts [nhisskt]["skcode"].ToString ()));
+							skillrecord = whichsk (bad, int.Parse (skts [nhisskt]["skid"].ToString ()));
 
 							hisskttime += skillrecord.channelBefore;
 						}
@@ -593,7 +599,7 @@ public class fight : MonoBehaviour {
 	{
 		for(int j=0;j<5;j++)
 		{
-			if(skid.Equals(ob.skills[j].skcode.ToString()))
+			if(skid.Equals(ob.skills[j].skid.ToString()))
 			{
 				return ob.skills[j];
 			}	

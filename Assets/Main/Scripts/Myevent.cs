@@ -77,7 +77,7 @@ public class Myevent : MonoBehaviour {
 			messageStore.RemoveFirst ();
 		}
 		//多条消息弹出效果
-		//inviteMessage.SetActive (true);
+		inviteMessage.SetActive (true);
 		inviteMessage.name = message.mId.ToString ();
 		messages.AddLast (message);
 	}
@@ -132,6 +132,8 @@ public class Myevent : MonoBehaviour {
 				foreach (BaseMessage message in messages) {
 					if (message.mId == mId) {
 						StartCoroutine (accept (message));
+						inviteMessage.SetActive (true);
+						Application.LoadLevel("SelectServant");
 					}
 				}
 				Application.LoadLevel("SelectServant");
@@ -216,6 +218,7 @@ public class Myevent : MonoBehaviour {
 		foreach (BaseMessage message in messages) {
 			if (message.mId == mId) {
 				StartCoroutine (accept (message));
+				Application.LoadLevel("SelectServant");
 			}
 		}
 		RemoveItem (item);

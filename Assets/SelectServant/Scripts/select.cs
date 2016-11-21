@@ -6,12 +6,12 @@ using LitJson;
 public class select : MonoBehaviour {
 	skill A=new skill(); 
 	skill B=new skill();
-	int uid;
+	string uid;
 	string token;
 	hero he=new hero();
 
 	void Start () {
-		uid=PlayerPrefs.GetInt("uid");
+		uid=PlayerPrefs.GetString("uid");
 		token = PlayerPrefs.GetString ("token");
 	}
 	// Update is called once per frame
@@ -39,12 +39,14 @@ public class select : MonoBehaviour {
 	}
 	public IEnumerator Sendmyandgethis()
 	{
-		
 		WWWForm form = new WWWForm();
-		form.AddField("uid", uid);
-		form.AddField("token", token);
+
 		form.AddField("selectEmp",int.Parse(this.transform.parent.tag));
-		WWW www = new WWW(" ", form);
+		var head = form.headers;
+		head ["token"] = token;
+		head ["uid"] = uid;
+		var dat = form.data;
+		WWW www = new WWW("http://115.28.140.76:8080/Game1/s/getEnemySelectEmp" , dat,head);
 		yield return www;
 		if (www.error != null) {
 			print (www.error);
