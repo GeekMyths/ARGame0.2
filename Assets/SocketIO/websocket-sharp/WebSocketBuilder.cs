@@ -56,11 +56,15 @@ namespace WebSocketSharp
 		public WebSocket websocket;
 		public Thread onlineThread;
 
-		public EventHandler<BoxEventArgs> BoxHandler {
-			set { boxHandler = value; }
-			get{ return boxHandler; }
+		public EventHandler<MessageEventArgs> OnMessage {
+			set { onMessage = value; }
+			get{ return onMessage; }
 		}
 
+		public EventHandler<CloseEventArgs> OnClose {
+			set { onClose = value; }
+			get{ return onClose; }
+		}
 		#endregion
 
 		#region constructor private
@@ -118,36 +122,8 @@ namespace WebSocketSharp
 
 		private void onmessage (object sender, MessageEventArgs e)
 		{
+			print ("onmessage");
 			print (e.Data);
-			if (boxHandler == null)
-				return;
-			try {
-				JsonData json = JsonMapper.ToObject (e.Data);
-				switch (int.Parse (json ["state"].ToString ())) {
-				case 1:
-					if ((byte.Parse (json ["code"].ToString ()) & ValueCode.MESSAGEBOX) != ValueCode.MESSAGEBOX)
-						break;
-					if (json ["value"].IsArray) {
-						int i, count;
-						count = json ["value"].Count;
-						for (i = 0; i < count; i++) {
-							print (json ["value"] [i].ToString ());
-							BoxEventArgs boxArgs = new BoxEventArgs (json ["value"] [i]);
-							boxHandler.Emit(this, boxArgs);
-						}
-					} else {
-						print(json["value"].ToJson());
-						BoxEventArgs boxArgs = new BoxEventArgs(json["value"]);
-						boxHandler.Emit(this, boxArgs);
-					}
-					break;
-				case -1:
-					print (json ["message"].ToString ());
-					break;
-				}
-			} catch (Exception exception) {
-				print ("WebSocketBuilder onmessage exception :" + exception.Message);
-			}
 		}
 
 		private void onclose (object sender, CloseEventArgs e)

@@ -33,13 +33,13 @@ public class input_ok : MonoBehaviour {
 		dic.Add ("token", token);
 		dic.Add ("uid",uid+"");
 		WWWForm form = new WWWForm ();
-		form.AddField ("ToGameName",ss);
+		form.AddField ("toGamename",ss);
 		var rawdata = form.data;
 		var head = form.headers;
 		head ["token"] = token;
 		head ["uid"] = uid;
 		print (ss);
-		WWW www = new WWW ("http://115.28.140.76:8080/Game1/s/battle/invite",rawdata,head);
+		WWW www = new WWW (API.Constant.inviteEnemy,rawdata,head);
 		yield return www;
 		if (www.error != null) {
 			print (www.error);

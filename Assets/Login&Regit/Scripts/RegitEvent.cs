@@ -73,7 +73,7 @@ public class RegitEvent : MonoBehaviour {
 			WWWForm form = new WWWForm();
 			form.AddField("account", account);
 			form.AddField("pwd", pwd);
-			WWW www = new WWW("http://115.28.140.76:8080/Game1/s/user/register", form);
+			WWW www = new WWW(API.Constant.register, form);
 			yield return www;
 			if (www.error != null) {
 				print (www.error);

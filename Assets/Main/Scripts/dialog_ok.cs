@@ -14,5 +14,6 @@ public class dialog_ok : MonoBehaviour {
 	}
 	public void OnClick () {
 		Application.Quit ();
+
 	}
 }

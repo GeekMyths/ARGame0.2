@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+using LitJson;
 using Main.MessageEventArgs;
 using Main.Messages;
 using WebSocketSharp;
@@ -41,7 +42,7 @@ public class Myevent : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		webSocketBuilder = WebSocketBuilder.instance ();
-		webSocketBuilder.BoxHandler += boxHandle;
+		webSocketBuilder.OnMessage += OnMessage;
 		webSocketBuilder.connect ();
 		username = PlayerPrefs.GetString ("uid");
 
@@ -55,7 +56,7 @@ public class Myevent : MonoBehaviour {
 
 		SetId ();
 		SetEValue ();
-		InviteMessage ();
+		//InviteMessage ();
 	}
 	
 	// Update is called once per frame
@@ -125,7 +126,7 @@ public class Myevent : MonoBehaviour {
 			AddItem (message);
 		}
 	}
-	public void InviteMessage(){
+	/*public void InviteMessage(){
 		inviteMessage.transform.FindChild ("dialog").transform.FindChild ("ok").GetComponent<Button> ().onClick.AddListener (
 			delegate() {
 				long mId = long.Parse (inviteMessage.name);
@@ -144,23 +145,25 @@ public class Myevent : MonoBehaviour {
 				inviteMessage.SetActive (false);
 			}
 		);
-	}
-	public void boxHandle (object context, BoxEventArgs e)
+	}*/
+	public void OnMessage (object context, MessageEventArgs e)
 	{
 		try {
-			MessageBox box = e.BOX;
-			if (box == null || box.getMessages ().Count == 0)
-				return;
-			if (box.isInBox ()) {
-				foreach (BaseMessage message in box.getMessages()) {
-					print(message.text);
-					lock (messageStore) {
-						messageStore.AddLast (message);
-					}
-				}
-			} else if (box.isOutBox ()) {
-
+			JsonData data = JsonMapper.ToObject(e.Data);
+			if(data["method"].ToString()=="startBattle"){
+			}else if(data["method"].ToString()=="friendSuccess"){
+			}else if(data["method"].ToString()=="inviteDeny"){
+			}else if(data["method"].ToString()=="inviteCancel"){
+			}else if(data["method"].ToString()=="battleInvite"){
+				BaseMessage m = null;
+				m.toUid =  long.Parse(data["message"]["toUid"].ToString());
+				m.fromUid = long.Parse(data["message"]["fromUid"].ToString()); 
+				m.mId = long.Parse(data["message"]["mid"].ToString());
+				m.state = byte.Parse(data["message"]["state"].ToString());
+				m.text = data["message"]["text"].ToString();
+				messageStore.AddFirst(m);
 			}
+
 		} catch (Exception ex) {
 			print ("main_background boxHandle exception" + ex.Message);
 		}
@@ -218,7 +221,6 @@ public class Myevent : MonoBehaviour {
 		foreach (BaseMessage message in messages) {
 			if (message.mId == mId) {
 				StartCoroutine (accept (message));
-				Application.LoadLevel("SelectServant");
 			}
 		}
 		RemoveItem (item);
@@ -230,15 +232,18 @@ public class Myevent : MonoBehaviour {
 		dic.Add ("uid", WebSocketSharp.WebSocketBuilder.UID + "");
 		dic.Add ("token", WebSocketSharp.WebSocketBuilder.TOKEN);
 		WWWForm form = new WWWForm ();
-		form.AddField ("fromId", message.fromUid + "");
-		form.AddField ("mId", message.mId + "");
-		form.AddField ("state", BaseMessage.ACCEPT);
-		WWW www = new WWW (API.Constant.handleMessage, Encoding.ASCII.GetBytes (form.ToString ()), dic);
+		form.AddField ("mid", message.mId + "");
+		WWW www = new WWW (API.Constant.acceptMessage, Encoding.ASCII.GetBytes (form.ToString ()), dic);
 		yield return www;
 		if (www.error != null) {
 			MonoBehaviour.print (www.error);
 		} else {
-
+			JsonData data = JsonMapper.ToJson (www.text);
+			if (int.Parse (data ["state"].ToString ()) == 1) {
+				Application.LoadLevel ("SelectServant");
+			} else {
+				print (data["message"].ToString());
+			}
 		}
 	}
 

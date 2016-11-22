@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using LitJson;
 
 public class LoginEvent : MonoBehaviour {
-	string url_login = "http://115.28.140.76:8080/Game1/s/user/login";
+	string url_login = API.Constant.login;
 	string token;
 	int state;
 	string uid;
